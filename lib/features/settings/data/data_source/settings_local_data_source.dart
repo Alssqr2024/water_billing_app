@@ -48,4 +48,12 @@ class SettingsLocalDataSource {
   Future<void> setUnitPrice(double unitPrice) async {
     await setSetting('unit_price', unitPrice.toString());
   }
+
+  Future<String?> getStampImagePath() async {
+    return await getSetting('stamp_image_path');
+  }
+
+  Future<void> setStampImagePath(String path) async {
+    await setSetting('stamp_image_path', path);
+  }
 }

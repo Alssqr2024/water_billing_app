@@ -2,10 +2,10 @@ import '../../domain/entities/customer_entity.dart';
 
 class CustomerModel extends CustomerEntity {
   CustomerModel({
-    int? id,
-    required String name,
-    required String phone,
-  }) : super(id: id, name: name, phone: phone);
+    super.id,
+    required super.name,
+    required super.phone,
+  });
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     return CustomerModel(

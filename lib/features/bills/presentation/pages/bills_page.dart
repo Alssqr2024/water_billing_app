@@ -229,47 +229,73 @@ class _BillsPageState extends ConsumerState<BillsPage> {
   }
 
   void _shareBill(BillEntity bill, CustomerEntity customer) async {
+    final messenger = ScaffoldMessenger.of(context);
     try {
-      await PdfService.shareBill(bill: bill, customer: customer);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('فشل في مشاركة الفاتورة: $e'),
-          backgroundColor: Colors.red,
-        ),
+      final stampPath = ref.read(stampImageProvider).value;
+      await PdfService.shareBill(
+        bill: bill,
+        customer: customer,
+        stampImagePath: stampPath,
       );
+    } catch (e) {
+      if (mounted) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text('فشل في مشاركة الفاتورة: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
   void _shareToWhatsApp(BillEntity bill, CustomerEntity customer) async {
+    final messenger = ScaffoldMessenger.of(context);
     try {
-      await PdfService.shareToWhatsApp(bill: bill, customer: customer);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('فشل في المشاركة عبر الواتساب: $e'),
-          backgroundColor: Colors.red,
-        ),
+      final stampPath = ref.read(stampImageProvider).value;
+      await PdfService.shareToWhatsApp(
+        bill: bill,
+        customer: customer,
+        stampImagePath: stampPath,
       );
+    } catch (e) {
+      if (mounted) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text('فشل في المشاركة عبر الواتساب: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
   void _printBill(BillEntity bill, CustomerEntity customer) async {
+    final messenger = ScaffoldMessenger.of(context);
     try {
-      await PdfService.printBill(bill: bill, customer: customer);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم إعداد الفاتورة للطباعة'),
-          backgroundColor: Colors.green,
-        ),
+      final stampPath = ref.read(stampImageProvider).value;
+      await PdfService.printBill(
+        bill: bill,
+        customer: customer,
+        stampImagePath: stampPath,
       );
+      if (mounted) {
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text('تم إعداد الفاتورة للطباعة'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('فشل في إعداد الطباعة: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text('فشل في إعداد الطباعة: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 

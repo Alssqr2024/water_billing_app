@@ -90,7 +90,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
             icon: Icon(Icons.receipt),
             label: 'الفواتير',
           ),
-          BottomNavigationBarItem(
+          BottomNavigationBarItem(  
             icon: Icon(Icons.settings),
             label: 'الإعدادات',
           ),

@@ -9,12 +9,14 @@ class PdfService {
   static Future<File> generateBillPdfFile({
     required BillEntity bill,
     required CustomerEntity customer,
+    String? stampImagePath,
   }) async {
     try {
       // إنشاء PDF
       final pdf = await PdfGenerator.generateBillPdf(
         bill: bill,
         customer: customer,
+        stampImagePath: stampImagePath,
       );
 
       // حفظ الملف مؤقتاً
@@ -36,9 +38,14 @@ class PdfService {
     required BillEntity bill,
     required CustomerEntity customer,
     String? subject,
+    String? stampImagePath,
   }) async {
     try {
-      final file = await generateBillPdfFile(bill: bill, customer: customer);
+      final file = await generateBillPdfFile(
+        bill: bill,
+        customer: customer,
+        stampImagePath: stampImagePath,
+      );
       
       await Share.shareXFiles(
         [XFile(file.path)],
@@ -55,9 +62,14 @@ class PdfService {
   static Future<void> shareToWhatsApp({
     required BillEntity bill,
     required CustomerEntity customer,
+    String? stampImagePath,
   }) async {
     try {
-      final file = await generateBillPdfFile(bill: bill, customer: customer);
+      final file = await generateBillPdfFile(
+        bill: bill,
+        customer: customer,
+        stampImagePath: stampImagePath,
+      );
       
       // نص مخصص للواتساب
       final whatsappText = '''
@@ -85,10 +97,15 @@ class PdfService {
   static Future<void> printBill({
     required BillEntity bill,
     required CustomerEntity customer,
+    String? stampImagePath,
   }) async {
     try {
       // بديل: حفظ ومشاركة للطباعة
-      final file = await generateBillPdfFile(bill: bill, customer: customer);
+      final file = await generateBillPdfFile(
+        bill: bill,
+        customer: customer,
+        stampImagePath: stampImagePath,
+      );
       await Share.shareXFiles(
         [XFile(file.path)],
         subject: 'طباعة فاتورة - ${customer.name}',

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart';
@@ -8,14 +9,21 @@ class PdfGenerator {
   static Future<pw.Document> generateBillPdf({
     required BillEntity bill,
     required CustomerEntity customer,
+    String? stampImagePath,
   }) async {
     final pdf = pw.Document();
 
     // تحميل الخط العربي
     final arabicFont = await _loadArabicFont();
 
-    final ByteData bytes = await rootBundle.load('assets/images/seal.png');
-    final Uint8List imageBytes = bytes.buffer.asUint8List();
+    // تحميل صورة الختم: من ملف إذا تم اختياره، وإلا من الأصول الافتراضية
+    final Uint8List imageBytes;
+    if (stampImagePath != null && stampImagePath.isNotEmpty) {
+      imageBytes = await File(stampImagePath).readAsBytes();
+    } else {
+      final ByteData bytes = await rootBundle.load('assets/images/seal.png');
+      imageBytes = bytes.buffer.asUint8List();
+    }
 
     pdf.addPage(
       pw.Page(
@@ -297,59 +305,6 @@ class PdfGenerator {
           ),
         ],
       ),
-    );
-  }
-
-  static pw.Widget _buildFooter(pw.Font arabicFont) {
-    return pw.Column(
-      children: [
-        pw.Divider(color: PdfColors.grey),
-        pw.SizedBox(height: 20),
-        pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-          children: [
-            pw.Row(
-              children: [
-                pw.Text(
-                  'شكراً لاستخدامكم خدماتنا',
-                  style: pw.TextStyle(
-                    font: arabicFont,
-                    fontSize: 12,
-                    color: PdfColors.blue,
-                  ),
-                ),
-                pw.SizedBox(height: 25),
-                pw.Text(
-                  'التوقيع',
-                  style: pw.TextStyle(
-                    font: arabicFont,
-                    fontSize: 12,
-                    fontWeight: pw.FontWeight.bold,
-                  ),
-                ),
-                pw.Container(
-                  width: 150,
-                  height: 1,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(color: PdfColors.black),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        pw.SizedBox(height: 10),
-        pw.Center(
-          child: pw.Text(
-            'للاستفسار: 0551234567',
-            style: pw.TextStyle(
-              font: arabicFont,
-              fontSize: 10,
-              color: PdfColors.grey,
-            ),
-          ),
-        ),
-      ],
     );
   }
 

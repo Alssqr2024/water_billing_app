@@ -20,33 +20,50 @@ class CustomerList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text('جاري تحميل البيانات...'),
-          ],
-        ),
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final showText = constraints.maxHeight >= 80;
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(),
+                if (showText) ...[
+                  const SizedBox(height: 16),
+                  const Text('جاري تحميل البيانات...'),
+                ],
+              ],
+            ),
+          );
+        },
       );
     }
 
     if (customers.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.people_outline, size: 60, color: Colors.grey),
-            const SizedBox(height: 16),
-            Text(
-              emptyMessage,
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          // إذا كانت المساحة صغيرة جداً نخفض حجم الأيقونة
+          final iconSize = constraints.maxHeight < 120 ? 32.0 : 60.0;
+          final showText = constraints.maxHeight >= 60;
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.people_outline, size: iconSize, color: Colors.grey),
+                if (showText) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    emptyMessage,
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ],
             ),
-          ],
-        ),
+          );
+        },
       );
     }
 
