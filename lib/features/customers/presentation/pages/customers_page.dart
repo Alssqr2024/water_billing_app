@@ -37,18 +37,6 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
     final customersState = ref.watch(customerProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'إدارة المشتركين 💧',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18, // تقليل الحجم
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.blue.shade700,
-        foregroundColor: Colors.white,
-      ),
       body: Column(
         children: [
           // بطاقة إضافة عميل جديدة
@@ -64,10 +52,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
                 gradient: LinearGradient(
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
-                  colors: [
-                    Colors.blue.shade50,
-                    Colors.cyan.shade50,
-                  ],
+                  colors: [Colors.blue.shade50, Colors.cyan.shade50],
                 ),
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -95,7 +80,9 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
 
           // شريط البحث
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12), // تقليل الـ padding
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+            ), // تقليل الـ padding
             child: CustomerSearchBar(
               onSearchChanged: (query) {
                 ref.read(customerProvider.notifier).searchCustomers(query);
@@ -104,10 +91,11 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
           ),
 
           const SizedBox(height: 8), // تقليل المسافة
-
           // عنوان قائمة العملاء
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12), // تقليل الـ padding
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+            ), // تقليل الـ padding
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -125,7 +113,8 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
                     height: 16,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   ),
-                  error: (_, __) => const Icon(Icons.error, size: 16, color: Colors.red),
+                  error: (_, __) =>
+                      const Icon(Icons.error, size: 16, color: Colors.red),
                   data: (customers) => Text(
                     '(${customers.length})',
                     style: const TextStyle(
@@ -140,20 +129,20 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
           ),
 
           const SizedBox(height: 4), // تقليل المسافة
-
           // قائمة العملاء
           Expanded(
             child: customersState.when(
-              loading: () => const CustomerList(
-                customers: [],
-                isLoading: true,
-              ),
+              loading: () => const CustomerList(customers: [], isLoading: true),
               error: (error, stack) => Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.error_outline, size: 40, color: Colors.red), // تقليل الحجم
+                    const Icon(
+                      Icons.error_outline,
+                      size: 40,
+                      color: Colors.red,
+                    ), // تقليل الحجم
                     const SizedBox(height: 12),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -168,9 +157,13 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton(
-                      onPressed: () => ref.read(customerProvider.notifier).loadCustomers(),
+                      onPressed: () =>
+                          ref.read(customerProvider.notifier).loadCustomers(),
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // تقليل الـ padding
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ), // تقليل الـ padding
                       ),
                       child: const Text(
                         'إعادة المحاولة',
@@ -234,9 +227,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
               ref.read(customerProvider.notifier).deleteCustomer(customer.id!);
               Navigator.of(context).pop();
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: const Text('حذف'),
           ),
         ],

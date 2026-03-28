@@ -140,43 +140,44 @@ class _BillsPageState extends ConsumerState<BillsPage> {
   }
 
   void _exportToPdf(BillEntity bill) async {
-  try {
-    // البحث عن بيانات العميل
-    final customers = ref.read(customerProvider).value ?? [];
-    
-    CustomerEntity customer;
-    
-    // البحث عن العميل باستخدام loop بسيط
-    CustomerEntity? foundCustomer;
-    for (final c in customers) {
-      if (c.id == bill.customerId) {
-        foundCustomer = c;
-        break;
+    try {
+      // البحث عن بيانات العميل
+      final customers = ref.read(customerProvider).value ?? [];
+
+      CustomerEntity customer;
+
+      // البحث عن العميل باستخدام loop بسيط
+      CustomerEntity? foundCustomer;
+      for (final c in customers) {
+        if (c.id == bill.customerId) {
+          foundCustomer = c;
+          break;
+        }
       }
-    }
-    
-    if (foundCustomer != null) {
-      customer = foundCustomer;
-    } else {
-      // استخدام البيانات من الفاتورة
-      customer = CustomerEntity(
-        id: bill.customerId,
-        name: bill.customerName,
-        phone: 'غير متوفر',
+
+      if (foundCustomer != null) {
+        customer = foundCustomer;
+      } else {
+        // استخدام البيانات من الفاتورة
+        customer = CustomerEntity(
+          id: bill.customerId,
+          name: bill.customerName,
+          phone: 'غير متوفر',
+        );
+      }
+
+      // عرض خيارات المشاركة (بدون await)
+      _showPdfOptions(bill, customer);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('خطأ في تصدير الفاتورة: $e'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
-
-    // عرض خيارات المشاركة (بدون await)
-    _showPdfOptions(bill, customer);
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('خطأ في تصدير الفاتورة: $e'),
-        backgroundColor: Colors.red,
-      ),
-    );
   }
-}
+
   void _showPdfOptions(BillEntity bill, CustomerEntity customer) {
     showModalBottomSheet(
       context: context,
@@ -322,21 +323,12 @@ class _BillsPageState extends ConsumerState<BillsPage> {
     final billsNotifier = ref.read(billsProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'إدارة الفواتير 🧾',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.green.shade700,
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showCreateBillDialog,
+        tooltip: 'فاتورة جديدة',
+        backgroundColor: Colors.blue.shade700,
         foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _showCreateBillDialog,
-            tooltip: 'فاتورة جديدة',
-          ),
-        ],
+        child: const Icon(Icons.add),
       ),
       body: Column(
         children: [

@@ -49,7 +49,7 @@ class PdfGenerator {
                   trailing: pw.Row(
                     children: [
                       pw.Text(
-                        "لجنة مشروع مياة أدمة",
+                        "لجنة المشروع ",
                         style: pw.TextStyle(font: arabicFont),
                       ),
                       pw.Image(
@@ -76,7 +76,17 @@ class PdfGenerator {
                     ],
                   ),
                 ),
-
+                pw.Center(
+                  child: pw.Text(
+                    "تم التطوير بواسطة : أحمد الضريبي",
+                    textAlign: pw.TextAlign.center,
+                    style: pw.TextStyle(
+                      font: arabicFont,
+                      fontSize: 8,
+                      color: PdfColors.blue,
+                    ),
+                  ),
+                ),
                 // الفوتر - Footer
                 // _buildFooter(arabicFont),
               ],
@@ -101,14 +111,7 @@ class PdfGenerator {
             color: PdfColors.blue,
           ),
         ),
-        pw.Text(
-          'مشروع مياة أدمة ',
-          style: pw.TextStyle(
-            fontSize: 16,
-            color: PdfColors.grey,
-            font: arabicFont,
-          ),
-        ),
+
         pw.Divider(thickness: 2, color: PdfColors.blue),
         pw.SizedBox(height: 10),
       ],
